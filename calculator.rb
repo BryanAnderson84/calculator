@@ -8,22 +8,45 @@
     #operand = operator.to_sym --> use for later to simplify
     case @user_operator
       when "+"
-        sum = first_number + second_number
-        puts "The answer is: #{sum}"
-      when "_"
-        sum = first_number - second_number
-        puts "The answer is: #{sum}"
+        @answer = first_number + second_number
+        puts "The answer is: #{@answer}"
+      when "-"
+        @answer = first_number - second_number
+        puts "The answer is: #{@answer}"
       when "*"
-        sum = first_number * second_number
-        puts "The answer is: #{sum}"
+        @answer = first_number * second_number
+        puts "The answer is: #{@answer}"
       when "/"
-        sum = first_number / second_number
-        puts "The answer is: #{sum}"
+        @answer = first_number / second_number
+        puts "The answer is: #{@answer}"
       else
         puts "Please use a correct value"
     end
     #puts first_number.public_send(operand, second_number) --> save for later
   end
+
+def keep_going
+  @user_first_number = @answer
+  correct_op
+  operator(@user_operator, @user_first_number, @user_second_number)
+  history_call
+end
+
+def history_call
+  puts "To clear value, press c. To keep using this value press y, to quit press q"
+  choice = gets.chomp
+  if choice == "c"
+    start
+  elsif choice == "y"
+    keep_going
+  elsif choice == "q"
+    exit
+  else
+    puts "Invalid entry - Please enter either c or y"
+    history_call
+  end
+
+end
 
   def correct_op
     puts "What is the operator? Must be one of the following: +, -, *, or /."
@@ -32,7 +55,10 @@
       when "+", "-", "*", "/"
         puts "What is the second number?"
         @user_second_number = gets.to_i
-        operator(@user_operator, @user_first_number, @user_second_number)
+        if @user_second_number == 0
+          puts "Must be a numerical value"
+          calculator
+        end
       else
         puts "Operator must be +, -, *, or /."
         correct_op
@@ -47,14 +73,13 @@
       puts "Must be a numerical value"
       calculator
     end
-    correct_op
   end
 
-
-while true
+def start
   calculator
-  puts "To go again press y, to exit press x"
-  if gets.chomp == 'x'
-    exit
-  end
+  correct_op
+  operator(@user_operator, @user_first_number, @user_second_number)
+  history_call
 end
+
+  start
